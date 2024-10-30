@@ -1,0 +1,22 @@
+@startuml
+start
+
+:Select Database Type (NoSQL/SQL);
+if (NoSQL) then (true)
+  :Choose NoSQL Database (MongoDB/CouchDB);
+else (false)
+  :Choose SQL Database (H2/SQLite);
+endif
+
+:Enter Connection Details (ConnectionString, Password, Configuration);
+:Validate Connection Details;
+
+if (Connection Valid) then (true)
+  :Add Database to System;
+  :Success Message;
+else (false)
+  :Error Message;
+endif
+
+stop
+@enduml

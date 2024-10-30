@@ -1,0 +1,19 @@
+@startuml
+start
+
+:Select Replication Strategy to Check;
+:Select Time Period for Analysis;
+
+:Retrieve Replication Logs for Selected Period;
+:Compare Source and Target Database Data;
+
+if (Data Discrepancies Found) then (true)
+  :Identify Discrepancy Details (Tables, Rows, Data Values);
+  :Generate Discrepancy Report;
+  :Notify Administrators;
+else (false)
+  :Generate Sync Success Report;
+endif
+
+stop
+@enduml

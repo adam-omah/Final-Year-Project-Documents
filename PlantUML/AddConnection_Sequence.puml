@@ -1,0 +1,33 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant User
+participant DBSystem
+participant SourceDatabase
+participant TargetDatabase
+
+User->>DBSystem: Select Source Database
+activate DBSystem
+DBSystem->>SourceDatabase: Select Target Database
+activate SourceDatabase
+SourceDatabase->>TargetDatabase: Choose Connection Type (Uni-Directional Replication, etc.)
+activate TargetDatabase
+TargetDatabase->>DBSystem: Fill Connection Details
+deactivate TargetDatabase
+DBSystem->>DBSystem: Validate Connection Configuration
+alt Connection Valid
+    DBSystem->>DBSystem: Establish Connection
+    DBSystem->>User: Success Message
+else
+    DBSystem->>User: Error Message
+end
+alt Connection Type Valid
+    DBSystem->>DBSystem: Select Tables for Replication
+    DBSystem->>DBSystem: Choose Replication Strategy
+else
+    DBSystem->>DBSystem: Configure Type Details
+end
+deactivate DBSystem
+@enduml

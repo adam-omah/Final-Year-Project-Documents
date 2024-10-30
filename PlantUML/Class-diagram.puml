@@ -1,0 +1,87 @@
+@startuml
+
+abstract class Database {
+  - databaseType: String
+  - connectionString: String
+  - password: String
+  - configuration: String
+  - size: int
+  - status: String
+  - lastUpdated: Date
+}
+
+abstract class DatabaseType{
+  + getDescription(): String
+}
+
+class NoSQL extends DatabaseType {
+
+}
+
+class SQL extends DatabaseType {
+
+}
+
+class MongoDB extends NoSQL {
+  - replicaSet: String
+}
+
+class CouchDB extends NoSQL {
+  - designDocuments: DesignDocument[]
+}
+
+class H2 extends SQL {
+  - mode: String
+}
+
+class SQLite extends SQL {
+  - filePath: String
+}
+
+abstract class Connection {
+  - connectionType: String
+  - startDB: Database
+  - endDB: Database
+  - status: String
+  - lastUsed: Date
+}
+
+class UniDirectionalReplication extends Connection {
+  - tables: Table[]
+  - replicationStrategy: ReplicationStrategy
+  - syncInterval: int
+}
+
+class BiDirectionalReplication extends Connection {
+  - tables: Table[]
+  - replicationStrategy: ReplicationStrategy
+  - syncInterval: int
+}
+
+class DBSystem {
+  - databases: Database[]
+  - connections: Connection[]
+  + addConnection(connection: Connection)
+  + addDatabase(database: Database)
+  - monitorDatabases(): void
+}
+
+abstract class SyncChecker {
+  + checkSyncStatus(): void
+}
+
+class UniDirectionalSyncChecker extends SyncChecker {
+
+}
+
+class BiDirectionalSyncChecker extends SyncChecker {
+
+}
+
+Database <|-- DatabaseType
+Connection "1" -- "1" SyncChecker
+
+DBSystem "1" -- "*" Database
+DBSystem "1" -- "*" Connection
+
+@enduml

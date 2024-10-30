@@ -1,0 +1,18 @@
+@startuml
+start
+
+:Select Database;
+:Choose Append-Only Strategy Implementation (Specific details if needed);
+:Configure Append-Only Settings (e.g., Log Rotation Policy, Compression);
+
+:Validate Append-Only Configuration;
+
+if (Configuration Valid) then (true)
+  :Enable Append-Only Mode for Database;
+  :Success Message;
+else (false)
+  :Error Message;
+endif
+
+stop
+@enduml

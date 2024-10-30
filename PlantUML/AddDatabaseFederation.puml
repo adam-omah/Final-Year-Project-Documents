@@ -1,0 +1,19 @@
+@startuml
+start
+
+:Select Target Database;
+:Select Source Databases (Multiple);
+
+:Define Data Federation Configuration (Mapping, Transformations, etc.);
+
+:Validate Data Federation Configuration;
+
+if (Configuration Valid) then (true)
+  :Establish Data Federation Connection;
+  :Success Message;
+else (false)
+  :Error Message;
+endif
+
+stop
+@enduml
