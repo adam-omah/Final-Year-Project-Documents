@@ -1,0 +1,26 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant User
+participant DatabaseSystem
+participant BlockchainNetwork
+
+User->>DatabaseSystem: Select Database
+activate DatabaseSystem
+
+User->>DatabaseSystem: Choose Blockchain Implementation
+User->>DatabaseSystem: Configure Blockchain Network Settings
+User->>DatabaseSystem: Map Database Schema to Blockchain Structure
+
+DatabaseSystem->>DatabaseSystem: Validate Blockchain Configuration
+
+alt Configuration Valid
+    DatabaseSystem->>BlockchainNetwork: Integrate Database
+    DatabaseSystem->>User: Success Message
+else
+    DatabaseSystem->>User: Error Message
+end
+
+deactivate DatabaseSystem
+@enduml

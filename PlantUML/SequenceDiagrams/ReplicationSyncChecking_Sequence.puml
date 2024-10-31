@@ -1,0 +1,43 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+participant User
+participant ReplicationMonitor
+participant SourceDatabase
+participant TargetDatabase
+
+User->>ReplicationMonitor: Select Replication Strategy
+activate ReplicationMonitor
+
+User->>ReplicationMonitor: Select Time Period for Analysis
+
+ReplicationMonitor->>SourceDatabase: Retrieve Replication Logs
+activate SourceDatabase
+SourceDatabase-->>ReplicationMonitor: Replication Logs
+deactivate SourceDatabase
+
+ReplicationMonitor->>SourceDatabase: Retrieve Data
+activate SourceDatabase
+SourceDatabase-->>ReplicationMonitor: Source Data
+deactivate SourceDatabase
+
+ReplicationMonitor->>TargetDatabase: Retrieve Data
+activate TargetDatabase
+TargetDatabase-->>ReplicationMonitor: Target Data
+deactivate TargetDatabase
+
+ReplicationMonitor->>ReplicationMonitor: Compare Source and Target Data
+
+alt Data Discrepancies Found
+    ReplicationMonitor->>ReplicationMonitor: Identify Discrepancy Details
+    ReplicationMonitor->>ReplicationMonitor: Generate Discrepancy Report
+    ReplicationMonitor->>User: Notify Administrators
+else
+    ReplicationMonitor->>ReplicationMonitor: Generate Sync Success Report
+    ReplicationMonitor->>User: Sync Success Report
+end
+
+deactivate ReplicationMonitor
+@enduml

@@ -1,0 +1,27 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant User
+participant DBSystem
+participant TargetDatabase
+participant SourceDatabases
+
+User->>DBSystem: Select Target Database
+activate DBSystem
+
+User->>DBSystem: Select Source Databases (Multiple)
+DBSystem->>SourceDatabases: Retrieve Source Database Details
+
+User->>DBSystem: Define Data Federation Configuration
+DBSystem->>DBSystem: Validate Data Federation Configuration
+
+alt Configuration Valid
+    DBSystem->>TargetDatabase: Establish Data Federation Connection
+    DBSystem->>User: Success Message
+else
+    DBSystem->>User: Error Message
+end
+
+deactivate DBSystem
+@enduml

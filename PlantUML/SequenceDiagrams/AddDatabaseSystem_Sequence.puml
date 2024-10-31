@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant User
+participant Middleware
+
+User->>Middleware: Open System Start Page
+activate Middleware
+
+User->>Middleware: Choose Add Database System
+
+User->>Middleware: Enter System Details (Name, Password, Configuration)
+Middleware->>Middleware: Validate Connection Details
+
+alt Configuration Valid
+  Middleware->>Middleware: Register Database System
+  Middleware->>User: Success Message
+else
+  Middleware->>User: Error Message
+end
+
+deactivate Middleware
+@enduml

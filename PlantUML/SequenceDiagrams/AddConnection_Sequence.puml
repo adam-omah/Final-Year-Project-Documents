@@ -12,7 +12,7 @@ User->>DBSystem: Select Source Database
 activate DBSystem
 DBSystem->>SourceDatabase: Select Target Database
 activate SourceDatabase
-SourceDatabase->>TargetDatabase: Choose Connection Type (Uni-Directional Replication, etc.)
+SourceDatabase->>TargetDatabase: Choose Connection Type
 activate TargetDatabase
 TargetDatabase->>DBSystem: Fill Connection Details
 deactivate TargetDatabase

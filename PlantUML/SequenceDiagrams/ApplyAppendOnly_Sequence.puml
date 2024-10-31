@@ -1,0 +1,24 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+participant User
+participant DatabaseSystem
+
+User->>DatabaseSystem: Select Database
+activate DatabaseSystem
+
+User->>DatabaseSystem: Choose Append-Only Strategy Implementation
+User->>DatabaseSystem: Configure Append-Only Settings
+
+DatabaseSystem->>DatabaseSystem: Validate Append-Only Configuration
+
+alt Configuration Valid
+    DatabaseSystem->>DatabaseSystem: Enable Append-Only Mode
+    DatabaseSystem->>User: Success Message
+else
+    DatabaseSystem->>User: Error Message
+end
+
+deactivate DatabaseSystem
+@enduml
