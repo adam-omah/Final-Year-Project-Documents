@@ -38,7 +38,7 @@ class SQLite extends SQL {
   - filePath: String
 }
 
-abstract class Connection {
+class Connection {
   - connectionType: String
   - startDB: Database
   - endDB: Database
@@ -46,19 +46,34 @@ abstract class Connection {
   - lastUsed: Date
 }
 
-class UniDirectionalReplication extends Connection {
+abstract class ReplicationStrategy {
+    - name : String
+    - syncInterval: int
+    - terminationProtocol : TerminationProtocol
+}
+
+class UniDirectionalReplication extends ReplicationStrategy {
+  - tables: Table[]
+  - replicationStrategy: ReplicationStrategy
+
+}
+
+class Federation extends ReplicationStrategy {
+  - databases: Database []
   - tables: Table[]
   - replicationStrategy: ReplicationStrategy
   - syncInterval: int
+  - terminationProtocol : TerminationProtocol
 }
 
-class BiDirectionalReplication extends Connection {
+class BiDirectionalReplication extends ReplicationStrategy {
   - tables: Table[]
   - replicationStrategy: ReplicationStrategy
   - syncInterval: int
+  - terminationProtocol : TerminationProtocol
 }
 
-class DBSystem {
+class Database_System {
   - databases: Database[]
   - connections: Connection[]
   + addConnection(connection: Connection)
@@ -78,10 +93,17 @@ class BiDirectionalSyncChecker extends SyncChecker {
 
 }
 
-Database <|-- DatabaseType
-Connection "1" -- "1" SyncChecker
+class FederationSyncChecker extends SyncChecker {
 
-DBSystem "1" -- "*" Database
-DBSystem "1" -- "*" Connection
+}
+
+Database <|-- DatabaseType
+Connection "1" -- "0…*" ReplicationStrategy
+Connection "1" -- "1" SyncChecker
+Connection "1…*" -- "2…*" Database
+
+Database_System "1" -- "*" Database
+
+Database_System "1" -- "*" Connection
 
 @enduml
