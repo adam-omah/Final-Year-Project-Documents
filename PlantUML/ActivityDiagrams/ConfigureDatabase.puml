@@ -1,0 +1,36 @@
+@startuml
+start
+
+:Select Database;
+
+partition "Configuration Options" {
+  fork
+    :Apply Data Consistency Strategy;
+    :Set Connection Test Interval;
+  end fork
+}
+
+:Show Connection Details;
+
+if (Edit Connection Details?) then (Yes)
+  :Edit Connection Details;
+  :Validate Connection Details;
+  if (Valid?) then (Yes)
+    :Update Connection Details;
+  else (No)
+    :Error Message;
+  endif
+else (No)
+endif
+
+
+
+if (Save Configuration?) then (Yes)
+  :Save Configuration;
+  :Confirmation Message;
+else (No)
+  :Discard Changes;
+endif
+
+stop
+@enduml

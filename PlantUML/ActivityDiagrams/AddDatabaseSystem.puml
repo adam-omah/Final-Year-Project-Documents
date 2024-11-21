@@ -5,9 +5,9 @@ start
 :Choose Add Database System;
 
 :Enter System Details (Name, Password, Configuration);
-:Validate Connection Details;
+:Validate System Details;
 
-if (Configuration Valid) then (true)
+if (System Details Valid) then (true)
     :Register Database System with Middleware;
     :Success Message;
 else (false)

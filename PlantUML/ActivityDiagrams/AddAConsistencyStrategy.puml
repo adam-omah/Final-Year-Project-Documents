@@ -1,0 +1,18 @@
+@startuml
+start
+
+:Select Database;
+
+:Choose Consistency Strategy (e.g. Append-Only);
+
+:Validate Configuration;
+
+if (Configuration Valid?) then (Yes)
+  :Apply Consistency Strategy to Database;
+  :Success Message;
+else (No)
+  :Error Message;
+endif
+
+stop
+@enduml

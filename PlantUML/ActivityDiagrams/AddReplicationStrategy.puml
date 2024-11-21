@@ -1,0 +1,20 @@
+@startuml
+start
+
+:Select Source Database;
+:Select Target Database;
+
+:Choose Replication Type (Uni-directional, Bi-directional etc.);
+
+:Validate Replication Configuration;
+
+if (Configuration Valid?) then (Yes)
+  :Select Tables/Data for Replication;
+  :Initiate Replication;
+  :Success Message;
+else (No)
+  :Error Message;
+endif
+
+stop
+@enduml
