@@ -6,7 +6,6 @@ start
 partition "Configuration Options" {
   fork
     :Apply Data Consistency Strategy;
-    :Set Connection Test Interval;
   end fork
 }
 
