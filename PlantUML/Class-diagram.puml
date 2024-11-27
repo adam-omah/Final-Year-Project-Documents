@@ -1,11 +1,11 @@
 @startuml
 
 abstract class Database {
+  - databaseId: number
+  - databaseName: String
   - databaseType: String
   - connectionString: String
   - password: String
-  - configuration: String
-  - size: int
   - status: String
   - lastUpdated: Date
 }
@@ -38,7 +38,7 @@ class SQLite extends SQL {
   - filePath: String
 }
 
-class Connection {
+class ReplicationConnection {
   - connectionType: String
   - startDB: Database
   - endDB: Database
@@ -98,12 +98,12 @@ class FederationSyncChecker extends SyncChecker {
 }
 
 Database <|-- DatabaseType
-Connection "1" -- "0…*" ReplicationStrategy
-Connection "1" -- "1" SyncChecker
-Connection "1…*" -- "2…*" Database
+ReplicationConnection "1" -- "0…1" ReplicationStrategy
+ReplicationConnection "1" -- "1" SyncChecker
+ReplicationConnection "0…*" -- "2…*" Database
 
 Database_System "1" -- "*" Database
 
-Database_System "1" -- "*" Connection
+Database_System "1" -- "*" ReplicationConnection
 
 @enduml
