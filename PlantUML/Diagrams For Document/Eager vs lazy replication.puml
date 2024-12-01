@@ -1,0 +1,32 @@
+@startuml
+left to right direction
+
+package "Eager Replication" {
+    database PrimaryDB2 as primaryE
+    database SecondaryDB1E as secondary1E
+    database SecondaryDB2E as secondary2E
+
+    primaryE -[#green]> secondary1E : "Sync Update"
+    primaryE -[#green]> secondary2E : "Sync Update"
+
+    note left of primaryE
+      - Changes are propagated synchronously.
+      - Ensures data consistency across all nodes.
+    end note
+}
+
+package "Lazy Replication" {
+    database PrimaryDB as primaryL
+    database SecondaryDB1 as secondary1
+    database SecondaryDB2 as secondary2
+
+    primaryL -right[#red]> secondary1 : "Async Update"
+    primaryL -left[#red]> secondary2 : "Async Update"
+
+    note left of primaryL
+      - Changes are propagated asynchronously.
+      - Potential for stale reads on secondary databases.
+    end note
+}
+
+@enduml

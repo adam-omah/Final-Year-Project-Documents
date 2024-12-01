@@ -1,0 +1,51 @@
+@startuml
+left to right direction
+
+package "Database Replication Change Propagation Strategies" {
+
+    package "Full-Table Replication" {
+        database "Primary DB" as primaryFull
+        database "Replica DB" as replicaFull
+
+        primaryFull --> replicaFull : "Replicate entire table\n(efficient for small tables)"
+    }
+
+    package "Row-Based Replication" {
+        database "Primary DB" as primaryRow
+        database "Replica DB" as replicaRow
+
+        primaryRow --> replicaRow : "Replicate changed rows\n(efficient for sparse updates)"
+    }
+
+    package "Statement-Based Replication" {
+        database "Primary DB" as primaryStmt
+        database "Replica DB" as replicaStmt
+
+        primaryStmt --> replicaStmt : "Replicate SQL statements\n(efficient for simple updates)"
+    }
+
+    package "Logical Replication" {
+        database "Primary DB" as primaryLogical
+        database "Replica DB" as replicaLogical
+
+        primaryLogical --> replicaLogical : "Replicate changes at logical level\n(uses transaction logs)"
+    }
+
+    package "Trigger-Based Replication" {
+        database "Primary DB" as primaryTrigger
+        database "Replica DB" as replicaTrigger
+
+        primaryTrigger --> replicaTrigger : "Replicate using triggers\n(fine-grained control)"
+    }
+
+    package "Block-Level Replication (HDFS)" {
+        component "Data Node 1" as node1
+        component "Data Node 2" as node2
+        component "Data Node 3" as node3
+
+        node1 --> node2 : "Replicate blocks\n(128MB or 256MB)"
+        node1 --> node3 : "Replicate blocks\n(128MB or 256MB)"
+    }
+}
+
+@enduml
