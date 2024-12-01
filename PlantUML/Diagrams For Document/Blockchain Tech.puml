@@ -1,0 +1,28 @@
+@startuml
+left to right direction
+
+rectangle "Genesis Block" as genesis {
+    previousHash = "0000"
+    data = "Initial block"
+    timestamp = "2024-01-01 00:00:00"
+    hash = "abcd1234"
+}
+
+rectangle "Block 1" as block1 {
+    previousHash = "abcd1234"
+    data = "Transaction 1"
+    timestamp = "2024-01-02 00:00:00"
+    hash = "efgh5678"
+}
+
+rectangle "Block 2" as block2 {
+    previousHash = "efgh5678"
+    data = "Transaction 2"
+    timestamp = "2024-01-03 00:00:00"
+    hash = "ijkl91011"
+}
+
+genesis --> block1
+block1 --> block2
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml
+participant "Source Database" as Source
+participant "Transaction Log" as Log
+participant "CDC Tool (e.g., Debezium)" as CDC
+participant "Change Event Queue (e.g., Kafka)" as Queue
+participant "Target Database/System" as Target
+
+Source -> Log : Writes Transaction (INSERT, UPDATE, DELETE)
+activate Source
+deactivate Source
+
+Log -> CDC : Reads Transaction Log
+activate Log
+deactivate Log
+
+CDC -> CDC : Parses Log & Extracts Changes
+activate CDC
+
+CDC -> Queue : Publishes Change Events (e.g., as JSON)
+deactivate CDC
+activate Queue
+deactivate Queue
+
+
+Queue -> Target : Consumes Change Events
+activate Target
+Target -> Target : Applies Changes (Replicates Data)
+deactivate Target
+
+
+@enduml

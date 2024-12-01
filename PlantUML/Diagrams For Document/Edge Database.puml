@@ -1,0 +1,22 @@
+@startuml
+
+package "Edge Environment" {
+  [Mobile Device] as Mobile
+  [Edge Database (SQLite, Redis, TimescaleDB)] as EdgeDB
+  [Edge Gateway (Optional)] as Gateway
+
+  Mobile --> EdgeDB : Data Storage/Retrieval
+  Gateway --> EdgeDB : Data Aggregation
+}
+
+
+package "Cloud Environment" {
+  [Central Database (PostgreSQL, Cloud Spanner)] as CloudDB
+  [Analytics Engine] as Analytics
+
+  EdgeDB --> CloudDB : Data Synchronization
+  CloudDB --> Analytics : Data Analysis
+}
+
+
+@enduml

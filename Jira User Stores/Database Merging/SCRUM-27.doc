@@ -77,12 +77,12 @@ hr.fullcontent
 <table class="tableBorder" cellpadding="0" cellspacing="0" border="0" width="100%">
     <tr>
         <td bgcolor="#f0f0f0" width="100%" colspan="2" valign="top">
-                            <b><a id="parent_issue_summary" href="https://grow-your-goals.atlassian.net/browse/SCRUM-6">Database Federation</a></b>
+                            <b><a id="parent_issue_summary" href="https://grow-your-goals.atlassian.net/browse/SCRUM-6">Database Merging</a></b>
                 <span style="font-size: 9px">(<a id="parent_issue_key" href="https://grow-your-goals.atlassian.net/browse/SCRUM-6">SCRUM-6</a>)</span>
                 <h3 class="formtitle"><img src="https://grow-your-goals.atlassian.net/images/icons/link_out_bot.gif" width="16" height="16" />
                         [SCRUM-27]&nbsp;<a href="https://grow-your-goals.atlassian.net/browse/SCRUM-27">Unique Data ID&#39;s</a>
             <span class="subText">
-               Created: 26/Oct/24                   &nbsp;Updated: 26/Oct/24
+               Created: 26/Oct/24                   &nbsp;Updated: 28/Nov/24
 
                                             </span>
             </h3>
@@ -122,7 +122,7 @@ hr.fullcontent
     
     
             <td width="20%"><b>Parent:</b></td>
-        <td width="80%"><a href="https://grow-your-goals.atlassian.net/browse/SCRUM-6">Database Federation</a></td>
+        <td width="80%"><a href="https://grow-your-goals.atlassian.net/browse/SCRUM-6">Database Merging</a></td>
     </table>
 
 <br />
@@ -230,7 +230,7 @@ hr.fullcontent
             </tr>
                                 <tr>
                 <td bgcolor="#f0f0f0" width="20%" valign="top"><b>Sprint:</b></td>
-                <td id="customfield_10020-10026-value" class="value" bgcolor="#ffffff" width="80%"></td>
+                <td id="customfield_10020-10026-value" class="value" bgcolor="#ffffff" width="80%">Database Merging - Sprint 5</td>
             </tr>
                                 <tr>
                 <td bgcolor="#f0f0f0" width="20%" valign="top"><b>Persona:</b></td>
@@ -280,7 +280,7 @@ hr.fullcontent
     </tr>
     </table>
 
-Generated at Thu Nov 21 14:49:32 GMT 2024 by Adam O&amp;#39;Mahony using Jira 1001.0.0-SNAPSHOT#100277-rev:c45b1254c7a959e9a020d259750f0529f935dbf6.
+Generated at Sun Dec 01 14:27:35 GMT 2024 by Adam O&amp;#39;Mahony using Jira 1001.0.0-SNAPSHOT#100277-rev:7e8ac5651e781d9518e3de4e798ca5b89113acce.
 
 </body>
 </html>
