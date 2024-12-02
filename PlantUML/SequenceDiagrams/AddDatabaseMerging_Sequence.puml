@@ -1,0 +1,19 @@
+@startuml
+
+actor User
+participant "Target Database" as targetDB
+participant "Source Databases" as sourceDB
+participant "Configuration Validator" as validator
+
+User -> targetDB : Select Target Database
+User -> sourceDB : Select Source Databases (Multiple)
+User -> validator : Define Data Merging Configuration (Mapping, Transformations, etc.)
+validator -> validator : Validate Database Merging Configuration
+alt Configuration Valid
+    validator -> targetDB : Establish Database Merging Connection
+    targetDB -> User : Success Message
+else Configuration Invalid
+    validator -> User : Error Message
+end
+
+@enduml

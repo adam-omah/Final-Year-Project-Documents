@@ -1,43 +1,27 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+actor User
+participant "Replication Strategy" as replicationStrategy
+participant "Sync Checker Configuration" as syncChecker
+participant "Database" as db
 
-participant User
-participant ReplicationMonitor
-participant SourceDatabase
-participant TargetDatabase
-
-User->>ReplicationMonitor: Select Replication Strategy
-activate ReplicationMonitor
-
-User->>ReplicationMonitor: Select Time Period for Analysis
-
-ReplicationMonitor->>SourceDatabase: Retrieve Replication Logs
-activate SourceDatabase
-SourceDatabase-->>ReplicationMonitor: Replication Logs
-deactivate SourceDatabase
-
-ReplicationMonitor->>SourceDatabase: Retrieve Data
-activate SourceDatabase
-SourceDatabase-->>ReplicationMonitor: Source Data
-deactivate SourceDatabase
-
-ReplicationMonitor->>TargetDatabase: Retrieve Data
-activate TargetDatabase
-TargetDatabase-->>ReplicationMonitor: Target Data
-deactivate TargetDatabase
-
-ReplicationMonitor->>ReplicationMonitor: Compare Source and Target Data
-
+User -> replicationStrategy : Select Replication Strategy to Check
+replicationStrategy -> replicationStrategy : Retrieve details of Replication Strategy
+replicationStrategy -> syncChecker : Display Sync Checker Configuration
+User -> syncChecker : Select Time Interval for Analysis
+syncChecker -> syncChecker : Validate Sync Check configuration
+alt Valid Sync Check
+    syncChecker -> syncChecker : Create Sync Checker
+else Invalid Sync Check
+    syncChecker -> User : Display Error message
+end
+syncChecker -> db : Compare Source and Target Database Data
 alt Data Discrepancies Found
-    ReplicationMonitor->>ReplicationMonitor: Identify Discrepancy Details
-    ReplicationMonitor->>ReplicationMonitor: Generate Discrepancy Report
-    ReplicationMonitor->>User: Notify Administrators
-else
-    ReplicationMonitor->>ReplicationMonitor: Generate Sync Success Report
-    ReplicationMonitor->>User: Sync Success Report
+    db -> syncChecker : Identify Discrepancy Details (Tables, Rows, Data Values)
+    syncChecker -> syncChecker : Generate Discrepancy Report
+    syncChecker -> User : Notify Administrators
+else No Data Discrepancies
+    db -> syncChecker : Generate Sync Success Report
 end
 
-deactivate ReplicationMonitor
 @enduml

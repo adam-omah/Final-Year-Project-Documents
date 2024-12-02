@@ -1,24 +1,18 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
-participant User
-participant DatabaseSystem
+actor User
+participant "Database" as db
+participant "Configuration Validator" as validator
 
-User->>DatabaseSystem: Select Database
-activate DatabaseSystem
-
-User->>DatabaseSystem: Choose Append-Only Strategy Implementation
-User->>DatabaseSystem: Configure Append-Only Settings
-
-DatabaseSystem->>DatabaseSystem: Validate Append-Only Configuration
-
+User -> db : Select Database
+User -> db : Choose Append-Only Strategy Implementation (Specific details if needed)
+User -> db : Configure Append-Only Settings (e.g., Log Rotation Policy, Compression)
+User -> validator : Validate Append-Only Configuration
 alt Configuration Valid
-    DatabaseSystem->>DatabaseSystem: Enable Append-Only Mode
-    DatabaseSystem->>User: Success Message
-else
-    DatabaseSystem->>User: Error Message
+    validator -> db : Enable Append-Only Mode for Database
+    db -> User : Success Message
+else Configuration Invalid
+    validator -> User : Error Message
 end
 
-deactivate DatabaseSystem
 @enduml

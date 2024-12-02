@@ -1,11 +1,17 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+actor User
+participant "Database" as db
+participant "Configuration Validator" as validator
 
-Alice -> Bob: Authentication Request
-Bob --> Alice: Authentication Response
+User -> db : Select Database
+User -> db : Choose Consistency Strategy
+User -> validator : Validate Configuration
+alt Configuration Valid?
+    validator -> db : Apply Consistency Strategy
+    db -> User : Success Message
+else
+    validator -> User : Error Message
+end
 
-Alice -> Bob: Another authentication Request
-Alice <-- Bob: another authentication Response
 @enduml

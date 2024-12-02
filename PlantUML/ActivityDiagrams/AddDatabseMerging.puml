@@ -4,12 +4,12 @@ start
 :Select Target Database;
 :Select Source Databases (Multiple);
 
-:Define Data Federation Configuration (Mapping, Transformations, etc.);
+:Define Data Merging Configuration (Mapping, Transformations, etc.);
 
-:Validate Data Federation Configuration;
+:Validate Database Merging Configuration;
 
 if (Configuration Valid) then (true)
-  :Establish Data Federation Connection;
+  :Establish Database Merging Connection;
   :Success Message;
 else (false)
   :Error Message;

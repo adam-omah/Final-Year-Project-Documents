@@ -1,29 +1,23 @@
 @startuml
-'https://plantuml.com/sequence-diagram
 
-autonumber
+actor User
+participant "Database Selector" as dbSelector
+participant "System" as system
 
-participant User
-participant DBSystem
-
-User->>DBSystem: Select Database Type (NoSQL/SQL)
-activate DBSystem
-
+User -> dbSelector : Select Database Type (NoSQL/SQL)
 alt NoSQL
-    User->>DBSystem: Choose NoSQL Database (MongoDB/CouchDB)
+    dbSelector -> dbSelector : Choose NoSQL Database (MongoDB/CouchDB)
 else SQL
-    User->>DBSystem: Choose SQL Database (H2/SQLite)
+    dbSelector -> dbSelector : Choose SQL Database (H2/SQLite)
 end
 
-User->>DBSystem: Enter Connection Details
-DBSystem->>DBSystem: Validate Connection Details
-
+User -> dbSelector : Enter Connection Details (ConnectionString, Password, Configuration)
+dbSelector -> system : Validate Connection Details
 alt Connection Valid
-    DBSystem->>DBSystem: Add Database to System
-    DBSystem->>User: Success Message
-else
-    DBSystem->>User: Error Message
+    system -> system : Add Database to System
+    system -> User : Success Message
+else Connection Invalid
+    system -> User : Error Message
 end
 
-deactivate DBSystem
 @enduml

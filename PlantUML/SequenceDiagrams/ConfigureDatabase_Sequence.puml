@@ -1,0 +1,29 @@
+@startuml
+
+actor User
+participant "Database" as db
+participant "Configuration Validator" as validator
+
+User -> db : Select Database
+User -> db : Apply Data Consistency Strategy
+db -> User : Show Connection Details
+
+alt Edit Connection Details?
+    User -> db : Edit Connection Details
+    db -> validator : Validate Connection Details
+    alt Valid?
+        validator -> db : Update Connection Details
+        db -> User : Confirmation Message
+    else Invalid
+        validator -> User : Error Message
+    end
+end
+
+alt Save Configuration?
+    User -> db : Save Configuration
+    db -> User : Confirmation Message
+else Discard Changes
+    db -> User : Discard Changes
+end
+
+@enduml
