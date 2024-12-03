@@ -5,14 +5,14 @@ package "Test-Driven Development (TDD) Process" {
     component "Developer" as dev
     component "Test Suite" as test
     component "Codebase" as code
-    component "Build System" as build
+    component "Test Runner" as system
 
     dev --> test : " 1. Write Test"
-    test --> build : "2. Run Test"
-    build --> test : "3. Test Fails"
+    test --> system : "2. Run Test"
+    system --> test : "3. Test Fails"
     dev --> code : "4. Write Code"
-    code --> build : "5. Run All Tests"
-    build --> test : "6. Tests Pass"
+    code --> system : "5. Run All Tests"
+    system --> test : "6. Tests Pass"
     dev --> code : "7. Refactor Code"
 }
 
