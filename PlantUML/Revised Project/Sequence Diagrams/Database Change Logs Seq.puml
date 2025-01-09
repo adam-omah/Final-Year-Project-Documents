@@ -1,0 +1,14 @@
+@startuml
+title Review Database Write Logs - Sequence Diagram
+
+actor Administrator
+participant "Central Management System"
+
+Administrator -> "Central Management System": Request to view logs (filters)
+
+activate "Central Management System"
+"Central Management System" -> "Central Management System": Retrieve matching logs
+"Central Management System" -> Administrator: Display log entries
+deactivate "Central Management System"
+
+@enduml

@@ -1,0 +1,18 @@
+@startuml
+title Define Data Schema - Sequence Diagram
+
+actor Developer
+participant Database
+
+Developer -> Database: Request to define schema (schema definition)
+
+activate Database
+Database -> Database: Validate schema definition
+alt Schema Valid
+  Database -> Database: Store schema definition
+  Database -> Developer: Return success message
+else Schema Invalid
+  Database -> Developer: Return error message
+end
+deactivate Database
+@enduml

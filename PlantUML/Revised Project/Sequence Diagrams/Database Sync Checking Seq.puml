@@ -1,0 +1,23 @@
+@startuml
+title Database Sync Checking - Sequence Diagram
+
+actor Administrator
+participant "Central Management System"
+participant "Node 1"
+participant "Node 2"
+
+
+Administrator -> "Central Management System": Request Consistency Check
+
+activate "Central Management System"
+"Central Management System" -> "Node 1": Retrieve Data
+"Central Management System" -> "Node 2": Retrieve Data
+"Central Management System" -> "Central Management System": Compare Data
+alt Inconsistent
+  "Central Management System" -> Administrator: Report Inconsistencies
+else Consistent
+  "Central Management System" -> Administrator: Report Consistency
+end
+deactivate "Central Management System"
+
+@enduml

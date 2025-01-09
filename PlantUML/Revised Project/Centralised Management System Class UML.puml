@@ -1,0 +1,68 @@
+@startuml
+title Centralised Management System Class Diagram
+
+class CentralManagementSystem {
+    - nodes : List<DatabaseNode>
+    + configureReplication(nodeId : UUID, settings : ReplicationSettings)
+    + monitorNodeStatus(nodeId : UUID) : NodeStatus
+    + checkDataConsistency() : ConsistencyReport
+    + manageUsers(user : User)
+    + performBackup(nodeId : UUID)
+    + performRestore(nodeId : UUID, backupData : byte[])
+}
+
+class ReplicationSettings {
+    - consistencyLevel : ConsistencyLevel
+    - conflictResolutionStrategy : TimestampConflictResolution
+}
+
+enum ConsistencyLevel {
+    STRONG
+    EVENTUAL
+}
+
+class TimestampConflictResolution {
+    + resolveConflict(record1: DataRecord, record2: DataRecord) : DataRecord
+}
+
+class NodeStatus {
+    - nodeId : UUID
+    - status : NodeStatusType
+    - metrics : PerformanceMetrics
+}
+
+enum NodeStatusType {
+    ONLINE
+    OFFLINE
+    SYNCING
+}
+
+class PerformanceMetrics {
+    - cpuUsage : double
+    - memoryUsage : double
+    - diskSpace : long
+}
+
+class ConsistencyReport {
+    - isConsistent : boolean
+    - inconsistencies : List<Inconsistency>
+}
+
+class Inconsistency {
+    - recordId : UUID
+    - conflictingNodes : List<UUID>
+}
+
+class User {
+  - userId: string
+  - roles: List<Role>
+}
+
+class Role {
+ - permissions: List<Permissions>
+}
+
+CentralManagementSystem "1" -- "0..*" DatabaseNode : manages
+
+
+@enduml

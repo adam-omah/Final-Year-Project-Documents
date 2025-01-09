@@ -1,0 +1,38 @@
+@startuml
+title Immutable Database Engine Class Diagram
+
+class DatabaseNode {
+    - nodeId : UUID
+    - dataStore : ImmutableDataStore
+    + connectToCluster(clusterAddress : String)
+    + replicateData(data : DataRecord, version : int)
+    + retrieveData(recordId : UUID, version : int) : DataRecord
+    + executeQuery(query : Query) : ResultSet
+}
+
+class ImmutableDataStore {
+    - data : Map<UUID, List<DataRecord>>
+    + storeRecord(record : DataRecord)
+    + retrieveRecord(recordId : UUID, version : int) : DataRecord
+    + getRecordVersions(recordId : UUID) : List<DataRecord>
+}
+
+class DataRecord {
+    - recordId : UUID
+    - version : int
+    - data : Map<String, Object>
+    - timestamp : long  <<required>>
+}
+
+class Query {
+    - queryParameters : Map<String, Object>
+}
+
+class ResultSet {
+    - records : List<DataRecord>
+}
+
+DatabaseNode "1..*" -- "1" ImmutableDataStore : uses
+
+
+@enduml

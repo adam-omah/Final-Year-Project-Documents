@@ -1,0 +1,18 @@
+@startuml
+title Master-Master Replication - Sequence Diagram
+
+actor Administrator
+participant "Central Management System"
+participant "Node 1"
+participant "Node 2"
+
+Administrator -> "Central Management System": Manage Replication Request
+activate "Central Management System"
+"Central Management System" -> "Node 1": Establish Connection
+"Central Management System" -> "Node 2": Establish Connection
+"Central Management System" -> "Node 1": Synchronize Data
+"Node 1" -> "Node 2": Synchronize Data
+"Central Management System" -> "Central Management System": Monitor Replication
+deactivate "Central Management System"
+
+@enduml

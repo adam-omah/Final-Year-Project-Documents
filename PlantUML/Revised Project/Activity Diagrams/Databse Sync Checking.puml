@@ -1,0 +1,14 @@
+@startuml
+title Database Sync Checking - Activity Diagram
+
+start
+:Access Central Management System;
+:Initiate Consistency Check;
+:Compare Data Across Nodes;
+if (Inconsistencies Found?) then (yes)
+  :Report Inconsistencies;
+else (no)
+  :Report Consistency;
+endif
+stop
+@enduml

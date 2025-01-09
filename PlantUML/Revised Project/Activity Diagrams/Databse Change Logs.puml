@@ -1,0 +1,12 @@
+@startuml
+title Review Database Write Logs - Activity Diagram
+
+start
+:Access Central Management System;
+:Navigate to Log Viewing Interface;
+:Specify filters (optional);
+:Retrieve matching log entries;
+:Display log entries;
+:Review logs;
+stop
+@enduml

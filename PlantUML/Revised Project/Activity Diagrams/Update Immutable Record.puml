@@ -1,0 +1,23 @@
+@startuml
+title Update Immutable Data Record - Activity Diagram
+
+start
+:Receive request (record ID, updated data);
+:Retrieve existing record;
+if (Record Exists?) then (yes)
+  :Validate updated data against schema;
+  if (Data Valid?) then (yes)
+    :Create new record version;
+    :Store new version in database;
+    :Return new version ID;
+    stop
+  else (no)
+    :Return error message (invalid data);
+    stop
+  endif
+else (no)
+  :Return error message (record not found);
+  stop
+endif
+
+@enduml

@@ -1,0 +1,17 @@
+@startuml
+title Create Immutable Data Record - Activity Diagram
+
+start
+:Receive request with data and schema ID;
+:Validate data against schema;
+if (Data Valid?) then (yes)
+  :Generate unique record ID;
+  :Create immutable record;
+  :Store record in database;
+  :Return record ID;
+  stop
+else (no)
+  :Return error message;
+  stop
+endif
+@enduml

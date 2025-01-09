@@ -1,0 +1,15 @@
+@startuml
+title Define Data Schema - Activity Diagram
+
+start
+:Receive schema definition;
+:Validate schema definition;
+if (Schema Valid?) then (yes)
+  :Store schema definition;
+  :Return success message;
+  stop
+else (no)
+  :Return error message;
+  stop
+endif
+@enduml

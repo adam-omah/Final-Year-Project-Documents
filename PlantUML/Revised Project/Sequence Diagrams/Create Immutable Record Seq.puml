@@ -1,0 +1,21 @@
+@startuml
+title Create Immutable Data Record - Sequence Diagram
+
+actor Developer
+participant Database
+
+Developer -> Database: Request to create record (data, schema ID)
+
+activate Database
+Database -> Database: Validate data against schema
+alt Data Valid
+  Database -> Database: Generate unique record ID
+  Database -> Database: Create immutable record
+  Database -> Database: Store record
+  Database -> Developer: Return record ID
+else Data Invalid
+  Database -> Developer: Return error message
+end
+deactivate Database
+
+@enduml

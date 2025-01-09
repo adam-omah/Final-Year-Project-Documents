@@ -1,0 +1,22 @@
+@startuml
+title Master-Master Replication - Activity Diagram
+
+start
+:Access Central Management System;
+:Select Replication Nodes;
+:Establish Connections Between Nodes;
+:Initial Data Synchronization;
+while (Replication Active?) is (yes)
+  :Monitor Replication Status;
+  if (Conflict Detected?) then (yes)
+    :Apply Conflict Resolution Strategy;
+    :Log Conflict;
+  endif
+  if (Node Failure Detected?) then (yes)
+    :Remove Failed Node;
+    :Alert Administrator;
+  endif
+endwhile
+stop
+
+@enduml

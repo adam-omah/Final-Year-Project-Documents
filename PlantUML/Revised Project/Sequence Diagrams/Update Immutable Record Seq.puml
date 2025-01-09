@@ -1,0 +1,25 @@
+@startuml
+title Update Immutable Data Record - Sequence Diagram
+
+actor Developer
+participant Database
+
+Developer -> Database: Request to update record (record ID, data)
+
+activate Database
+Database -> Database: Retrieve existing record
+alt Record Exists
+  Database -> Database: Validate data against schema
+  alt Data Valid
+    Database -> Database: Create new record version
+    Database -> Database: Store new version
+    Database -> Developer: Return new version ID
+  else Data Invalid
+    Database -> Developer: Return error message (invalid data)
+  end
+else Record Not Found
+  Database -> Developer: Return error message (record not found)
+end
+deactivate Database
+
+@enduml
