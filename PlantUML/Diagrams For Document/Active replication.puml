@@ -1,0 +1,31 @@
+@startuml
+title Active Replication
+
+box "Master Node"
+participant Master
+end box
+
+box "Replica Nodes"
+participant Replica1
+participant Replica2
+end box
+
+alt Active Replication
+Master -> Replica1: Log Entry (Immediate)
+Replica1 -> Replica1: Verify Schema Compatibility
+Master -> Replica2: Log Entry (Immediate)
+Replica2 -> Replica2: Verify Schema Compatibility
+else Schema Mismatch
+Master -> Replica1: Halt Replication, Report Error
+Master -> Replica2: Halt Replication, Report Error
+else CREATE/DROP Operations
+Master -> Replica1: Update Schema + Apply Changes
+Master -> Replica2: Update Schema + Apply Changes
+end
+
+note left of Replica2
+  1. Replica nodes ensure schema compatibility for all changes, except CREATE/DROP operations.
+  2. Replica configuration (connection details) stored in nodes.json, which simplifies node management.
+end note
+
+@enduml
