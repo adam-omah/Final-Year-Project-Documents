@@ -1,0 +1,57 @@
+@startuml
+title Passive Replication Retry Mechanism
+
+actor Node_A as "Originating Node (A)"
+participant Node_B as "Target Node (B)" #Gray
+participant PassiveReplicationService as "Passive Replication Service" order 30
+
+Node_A -> Node_A: Local Data Change Committed
+
+activate Node_A
+Node_A -> Node_B !! : Attempt Active Replication (Data Update)
+note right of Node_A : Node B is offline/unreachable
+Node_B --> Node_A : Failure (e.g., Timeout, Connection Refused)
+deactivate Node_A #FF0000
+
+activate PassiveReplicationService
+Node_A -> PassiveReplicationService : Report Failed Replication (Target: B, Data: Update)
+PassiveReplicationService -> PassiveReplicationService : Enqueue Failed Request\n(Target=B, Data=Update, Attempts=0, Timestamp=Now)
+deactivate Node_A
+
+loop Retries < MaxAttempts AND ElapsedTime < MaxTimeout
+
+    PassiveReplicationService -> PassiveReplicationService : Wait Configurable Interval (e.g., 1 min)
+    note right of PassiveReplicationService : Check queue for pending retries
+
+    PassiveReplicationService -> Node_B : Retry Replication (Data Update)
+    activate PassiveReplicationService #LightBlue
+
+    alt Node B is Now Online
+
+        Node_B -> Node_B : Receive and Apply Update
+        activate Node_B #LightGreen
+        Node_B --> PassiveReplicationService : Success Acknowledgment
+        deactivate Node_B
+
+        PassiveReplicationService -> PassiveReplicationService : Dequeue Successful Request (Target=B)
+        note right of PassiveReplicationService : Replication Complete
+        break 'Exit loop on success
+
+    else Node B Still Offline
+
+        Node_B --> PassiveReplicationService : Failure (e.g., Timeout, Connection Refused)
+        PassiveReplicationService -> PassiveReplicationService : Update Request\n(Increment Attempts, Check Timeout)
+        deactivate PassiveReplicationService #FF0000
+
+        opt Max Retries or Timeout Reached
+            PassiveReplicationService -> PassiveReplicationService : Mark Request as Failed Permanently\n(Log error, potentially requires manual intervention)
+            note right of PassiveReplicationService : Max retries/timeout exceeded
+            break 'Exit loop on permanent failure
+        end
+
+    end
+    deactivate PassiveReplicationService #LightBlue
+
+end
+
+@enduml

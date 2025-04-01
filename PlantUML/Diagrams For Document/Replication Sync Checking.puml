@@ -1,0 +1,69 @@
+@startuml
+title Replication Synchronization Check Process
+
+participant Scheduler order 10
+participant Node_A as "Initiating Node (A)" order 20
+participant Node_B as "Peer Node (B)" order 30
+
+Scheduler -> Node_A : Trigger Sync Check (Based on Interval)
+activate Node_A
+
+Node_A -> Node_B : Request Data/State Summary\n(for comparison)
+activate Node_B
+Node_B --> Node_A : Provide Data/State Summary
+deactivate Node_B
+
+Node_A -> Node_A : Compare Local State with Peer State
+note left of Node_A : Perform Consistency Check Logic
+
+alt Data is Consistent
+
+    Node_A -> Node_A : Log Check Complete (Consistent)
+    deactivate Node_A
+
+else Data is Inconsistent
+
+    Node_A -> Node_A : Log Discrepancy Detected
+    note left of Node_A : Prepare to analyze logs/differences
+
+    ' --- Log analysis phase (simplified) ---
+    ' In reality, this might involve more back-and-forth
+    ' or Node A requesting specific log segments from B.
+    Node_A -> Node_B : Request Relevant Log Information
+    activate Node_B
+    Node_B --> Node_A : Provide Log Information
+    deactivate Node_B
+
+    Node_A -> Node_A : Analyze Logs & Identify Specific Differences
+    note left of Node_A : Determine which node(s) need updates
+
+    alt Node B Requires Updates (Node A has correct data)
+
+        Node_A -> Node_A : Package Missing Data for Node B
+        Node_A -> Node_B : Send Replication Request (Corrective Data)
+        activate Node_B
+        Node_B -> Node_B : Apply Received Updates
+        Node_B --> Node_A : Acknowledge Update (Optional)
+        deactivate Node_B
+        Node_A -> Node_A : Log Sync Resolution Initiated (A -> B)
+
+    else Node A Requires Updates (Node B has correct data)
+
+        Node_A -> Node_B : Request Reverse Sync\n(Ask B to send missing data)
+        activate Node_B
+        Node_B -> Node_B : Identify and Package Missing Data for Node A
+        Node_B -> Node_A : Send Replication Request (Corrective Data)
+        activate Node_A #LightBlue
+        Node_A -> Node_A : Apply Received Updates
+        deactivate Node_A #LightBlue
+        Node_A --> Node_B : Acknowledge Update (Optional)
+        deactivate Node_B
+        Node_A -> Node_A : Log Sync Resolution Initiated (B -> A)
+
+    end
+
+    deactivate Node_A
+
+end
+
+@enduml
