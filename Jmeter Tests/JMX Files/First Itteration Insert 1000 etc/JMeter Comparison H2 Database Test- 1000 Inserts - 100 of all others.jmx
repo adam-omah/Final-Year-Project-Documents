@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jmeterTestPlan version="1.2" properties="5.0" jmeter="5.6.3">
   <hashTree>
-    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Jmeter Comparison Database Test">
+    <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Jmeter H2 Comparison Database Test">
       <boolProp name="TestPlan.serialize_threadgroups">true</boolProp>
       <elementProp name="TestPlan.user_defined_variables" elementType="Arguments" guiclass="ArgumentsPanel" testclass="Arguments" testname="User Defined Variables">
         <collectionProp name="Arguments.arguments">
@@ -39,7 +39,7 @@
         </collectionProp>
       </HeaderManager>
       <hashTree/>
-      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group">
+      <SetupThreadGroup guiclass="SetupThreadGroupGui" testclass="SetupThreadGroup" testname="setUp Thread Group" enabled="true">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -50,7 +50,7 @@
         </elementProp>
       </SetupThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Create Extension">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Create Table" enabled="true">
           <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
           <stringProp name="HTTPSampler.port">${basePort}</stringProp>
           <stringProp name="HTTPSampler.path">${basePath}</stringProp>
@@ -62,7 +62,9 @@
             <collectionProp name="Arguments.arguments">
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;sql&quot;: &quot;CREATE EXTENSION IF NOT EXISTS \&quot;pgcrypto\&quot;;&quot;}</stringProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;sql&quot;: &quot;CREATE TABLE IF NOT EXISTS ${tableName} (id UUID PRIMARY KEY, username VARCHAR(100) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP);&quot;&#xd;
+}</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
             </collectionProp>
@@ -79,36 +81,7 @@
           </JSONPathAssertion>
           <hashTree/>
         </hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Create Table">
-          <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
-          <stringProp name="HTTPSampler.port">${basePort}</stringProp>
-          <stringProp name="HTTPSampler.path">${basePath}</stringProp>
-          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
-          <stringProp name="HTTPSampler.method">POST</stringProp>
-          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
-          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
-          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
-            <collectionProp name="Arguments.arguments">
-              <elementProp name="" elementType="HTTPArgument">
-                <boolProp name="HTTPArgument.always_encode">false</boolProp>
-                <stringProp name="Argument.value">{&quot;sql&quot;: &quot;CREATE TABLE IF NOT EXISTS ${tableName} (id UUID PRIMARY KEY DEFAULT gen_random_uuid(), username VARCHAR(100) UNIQUE NOT NULL, email VARCHAR(255) UNIQUE NOT NULL, created_at TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP);&quot;}</stringProp>
-                <stringProp name="Argument.metadata">=</stringProp>
-              </elementProp>
-            </collectionProp>
-          </elementProp>
-        </HTTPSamplerProxy>
-        <hashTree>
-          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion - Execution Successful" enabled="true">
-            <stringProp name="JSON_PATH">$.message</stringProp>
-            <stringProp name="EXPECTED_VALUE">Execution successful</stringProp>
-            <boolProp name="JSONVALIDATION">true</boolProp>
-            <boolProp name="EXPECT_NULL">false</boolProp>
-            <boolProp name="INVERT">false</boolProp>
-            <boolProp name="ISREGEX">true</boolProp>
-          </JSONPathAssertion>
-          <hashTree/>
-        </hashTree>
-        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="UUID ">
+        <JSR223Sampler guiclass="TestBeanGUI" testclass="JSR223Sampler" testname="UUID " enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -142,7 +115,7 @@ SampleResult.setResponseOK()</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Insert Subscriber">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Insert Subscriber" enabled="true">
           <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
           <stringProp name="HTTPSampler.port">${basePort}</stringProp>
           <stringProp name="HTTPSampler.path">${basePath}</stringProp>
@@ -155,7 +128,7 @@ SampleResult.setResponseOK()</stringProp>
               <elementProp name="" elementType="HTTPArgument">
                 <boolProp name="HTTPArgument.always_encode">false</boolProp>
                 <stringProp name="Argument.value">{&#xd;
-    &quot;sql&quot;: &quot;INSERT INTO ${tableName} (id, username, email) VALUES (&apos;${pre_generated_uuid}&apos;, &apos;user_${__counter(FALSE)}&apos;, &apos;email_${__counter(FALSE)}@test.com&apos;) ON CONFLICT (username) DO NOTHING&quot;&#xd;
+    &quot;sql&quot;: &quot;INSERT INTO ${tableName} (id, username, email) VALUES (&apos;${pre_generated_uuid}&apos;, &apos;user_${__counter(FALSE)}&apos;, &apos;email_${__counter(FALSE)}@test.com&apos;)&quot;&#xd;
 }</stringProp>
                 <stringProp name="Argument.metadata">=</stringProp>
               </elementProp>
@@ -172,7 +145,7 @@ SampleResult.setResponseOK()</stringProp>
             <boolProp name="ISREGEX">true</boolProp>
           </JSONPathAssertion>
           <hashTree/>
-          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion - Execution Successful">
+          <JSONPathAssertion guiclass="JSONPathAssertionGui" testclass="JSONPathAssertion" testname="JSON Assertion - Execution Successful" enabled="true">
             <stringProp name="JSON_PATH">$.message</stringProp>
             <stringProp name="EXPECTED_VALUE">Execution successful</stringProp>
             <boolProp name="JSONVALIDATION">true</boolProp>
@@ -182,7 +155,7 @@ SampleResult.setResponseOK()</stringProp>
           </JSONPathAssertion>
           <hashTree/>
         </hashTree>
-        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Create UUID">
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Create UUID" enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -197,7 +170,7 @@ vars.put(&quot;pre_generated_uuid&quot;, generatedUUID)
           <stringProp name="scriptLanguage">groovy</stringProp>
         </JSR223PreProcessor>
         <hashTree/>
-        <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Store UUID in que">
+        <JSR223PostProcessor guiclass="TestBeanGUI" testclass="JSR223PostProcessor" testname="Store UUID in que" enabled="true">
           <stringProp name="cacheKey">true</stringProp>
           <stringProp name="filename"></stringProp>
           <stringProp name="parameters"></stringProp>
@@ -211,7 +184,51 @@ queue.offer(uuidToStore)</stringProp>
         </JSR223PostProcessor>
         <hashTree/>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG Select All users with like condition - 100 times" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG Select All users - 100 times">
+        <intProp name="ThreadGroup.num_threads">5</intProp>
+        <intProp name="ThreadGroup.ramp_time">2</intProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
+        <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
+        <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller">
+          <stringProp name="LoopController.loops">20</stringProp>
+          <boolProp name="LoopController.continue_forever">false</boolProp>
+        </elementProp>
+      </ThreadGroup>
+      <hashTree>
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Select All Subsribers" enabled="true">
+          <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
+          <stringProp name="HTTPSampler.port">${basePort}</stringProp>
+          <stringProp name="HTTPSampler.path">${basePath}</stringProp>
+          <boolProp name="HTTPSampler.follow_redirects">true</boolProp>
+          <stringProp name="HTTPSampler.method">POST</stringProp>
+          <boolProp name="HTTPSampler.use_keepalive">true</boolProp>
+          <boolProp name="HTTPSampler.postBodyRaw">true</boolProp>
+          <elementProp name="HTTPsampler.Arguments" elementType="Arguments">
+            <collectionProp name="Arguments.arguments">
+              <elementProp name="" elementType="HTTPArgument">
+                <boolProp name="HTTPArgument.always_encode">false</boolProp>
+                <stringProp name="Argument.value">{&#xd;
+    &quot;sql&quot;: &quot;SELECT * FROM ${tableName}&quot;&#xd;
+}</stringProp>
+                <stringProp name="Argument.metadata">=</stringProp>
+              </elementProp>
+            </collectionProp>
+          </elementProp>
+        </HTTPSamplerProxy>
+        <hashTree>
+          <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="Response Code 200 Assertion" enabled="true">
+            <collectionProp name="Asserion.test_strings">
+              <stringProp name="49586">200</stringProp>
+            </collectionProp>
+            <stringProp name="Assertion.custom_message"></stringProp>
+            <stringProp name="Assertion.test_field">Assertion.response_code</stringProp>
+            <boolProp name="Assertion.assume_success">false</boolProp>
+            <intProp name="Assertion.test_type">1</intProp>
+          </ResponseAssertion>
+          <hashTree/>
+        </hashTree>
+      </hashTree>
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="TG Select All users with like condition - 100 times">
         <intProp name="ThreadGroup.num_threads">5</intProp>
         <intProp name="ThreadGroup.ramp_time">2</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -266,7 +283,7 @@ queue.offer(uuidToStore)</stringProp>
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Update Rows">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Update Rows" enabled="true">
           <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
           <stringProp name="HTTPSampler.port">${basePort}</stringProp>
           <stringProp name="HTTPSampler.path">${basePath}</stringProp>
@@ -306,7 +323,7 @@ queue.offer(uuidToStore)</stringProp>
           </JSONPathAssertion>
           <hashTree/>
         </hashTree>
-        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Get UUID from Que">
+        <JSR223PreProcessor guiclass="TestBeanGUI" testclass="JSR223PreProcessor" testname="Get UUID from Que" enabled="true">
           <stringProp name="scriptLanguage">groovy</stringProp>
           <stringProp name="parameters"></stringProp>
           <stringProp name="filename"></stringProp>
@@ -344,7 +361,7 @@ if (uuidToUse != null) {
         </elementProp>
       </ThreadGroup>
       <hashTree>
-        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Delete Rows">
+        <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="HTTP - Delete Rows" enabled="true">
           <stringProp name="HTTPSampler.domain">${baseURL}</stringProp>
           <stringProp name="HTTPSampler.port">${basePort}</stringProp>
           <stringProp name="HTTPSampler.path">${basePath}</stringProp>
@@ -411,7 +428,7 @@ if (uuidToUse != null) {
         </JSR223PreProcessor>
         <hashTree/>
       </hashTree>
-      <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group" enabled="true">
+      <PostThreadGroup guiclass="PostThreadGroupGui" testclass="PostThreadGroup" testname="tearDown Thread Group">
         <intProp name="ThreadGroup.num_threads">1</intProp>
         <intProp name="ThreadGroup.ramp_time">1</intProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
@@ -454,7 +471,7 @@ if (uuidToUse != null) {
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report">
+      <ResultCollector guiclass="SummaryReport" testclass="ResultCollector" testname="Summary Report" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -491,9 +508,7 @@ if (uuidToUse != null) {
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <Summariser guiclass="SummariserGui" testclass="Summariser" testname="Generate Summary Results" enabled="true"/>
-      <hashTree/>
-      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree">
+      <ResultCollector guiclass="ViewResultsFullVisualizer" testclass="ResultCollector" testname="View Results Tree" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
@@ -530,7 +545,7 @@ if (uuidToUse != null) {
         <stringProp name="filename"></stringProp>
       </ResultCollector>
       <hashTree/>
-      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results">
+      <ResultCollector guiclass="GraphVisualizer" testclass="ResultCollector" testname="Graph Results" enabled="true">
         <boolProp name="ResultCollector.error_logging">false</boolProp>
         <objProp>
           <name>saveConfig</name>
