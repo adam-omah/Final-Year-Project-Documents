@@ -1,0 +1,10 @@
+Label,# Samples,Average,Min,Max,Std. Dev.,Error %,Throughput,Received KB/sec,Sent KB/sec,Avg. Bytes
+HTTP - Create Table,1,33,33,33,0.00,0.000%,30.30303,4.00,8.61,135.0
+JSR223 Sampler,1,152,152,152,0.00,0.000%,6.57895,0.00,0.00,.0
+HTTP - Insert Subscriber,1000,4,1,20,2.56,0.000%,177.46229,31.19,51.61,180.0
+HTTP - Select All Subsribers,100,15,7,48,5.76,0.000%,51.51984,4776.55,11.97,94938.0
+HTTP - Select Subsribers by Like Comparison,100,121,89,288,28.78,0.000%,24.46184,2267.93,6.38,94938.0
+HTTP - Update Rows,100,13,5,49,8.33,0.000%,23.27205,3.05,8.05,134.0
+HTTP - Delete Rows,100,11,3,23,3.60,0.000%,23.00966,3.06,6.47,136.0
+HTTP - Drop Table,1,16,16,16,0.00,0.000%,62.50000,9.77,14.22,160.0
+TOTAL,1403,14,1,288,31.15,0.000%,67.18062,897.58,19.31,13681.3
