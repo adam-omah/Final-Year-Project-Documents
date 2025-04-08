@@ -1,0 +1,43 @@
+@startuml Layered Cloud Run Deployment (Combined Container - Basic PlantUML)
+
+title Google Cloud Run Deployment Layers (Combined Container)
+
+skinparam packageStyle rectangle
+
+actor "User / Client" as User
+
+package "Google Cloud Platform" {
+
+  package "Networking (VPC - Optional)" {
+    node "VPC Network" as VPC
+    node "Subnet" as Subnet
+    ' VPC Connector might not be needed if only exposing publicly
+    ' node "Serverless VPC Access Connector" as VPCConnector
+  }
+
+  package "Serverless Compute (Cloud Run)" {
+      node "Cloud Run Service (Combined App)" as AppService {
+         interface "Public HTTPS URL\n(app...run.app)" as AppURL
+         component "Container Configs" as TheContainer {
+           component "Spring Boot Process (Combined)" as AppProc
+           component "PostgreSQL Process" as DBProc
+         }
+         component "Normal Container" as TheContainer {
+                    component "Rust DB Process"
+         }
+      }
+  }
+
+   package "IAM & Security" {
+      node "Firewall Rules (Implied)" as Firewall <<Virtual>>
+      node "IAM (Service Account)" as IAM <<Virtual>>
+  }
+
+}
+
+' --- Relationships ---
+User --> AppURL : HTTPS Request (Port 443)
+
+AppProc -> DBProc : Connects via localhost:5432 (JDBC)
+
+@enduml

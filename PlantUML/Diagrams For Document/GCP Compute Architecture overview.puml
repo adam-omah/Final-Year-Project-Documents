@@ -1,0 +1,67 @@
+@startuml Layered GCE VM Deployment (Combined Container - Detailed Layers)
+
+title Google Compute Engine VM Deployment Layers (Combined Container - Detailed)
+
+skinparam packageStyle rectangle
+skinparam node {
+    borderColor Black
+    borderThickness 1
+}
+skinparam component {
+    borderColor Black
+    borderThickness 1
+}
+
+
+actor "User / Client" as User
+
+package "Google Cloud Platform" {
+
+  package "Networking (VPC)" {
+    node "VPC Network (e.g., default)" as VPC {
+        node "Subnet" as Subnet
+        node "Firewall Rule" as Firewall
+        node "External IP Address" as ExtIP <<Network Endpoint>>
+    }
+     Firewall --> ExtIP : Allows Inbound TCP Port 8080
+  }
+
+
+  package "Compute (Compute Engine)" {
+      node "GCE VM Instance" as VM {
+         interface "VM Network Interface (nic0)" as VMNic
+
+         node "Operating System (e.g., Debian)" as VMOS {
+
+            package "Docker Engine (Daemon)" as DockerDaemon {
+                node "Docker Volume\n(pg_app_data)" as DockerVol <<Persistent Storage>>
+                node "Docker Network\n(e.g., bridge)" as DockerNet
+
+                node "Running Container (Combined App)" as TheContainer {
+                    interface "Container Network Interface" as ContainerNic
+                    component "Spring Boot Process\n(Listens 0.0.0.0:8080)" as AppProc
+                    component "PostgreSQL Process\n(Listens 127.0.0.1:5432)" as DBProc
+                }
+            }
+         }
+      }
+  }
+}
+
+' --- Network Flow ---
+User -down-> ExtIP : HTTP Request to\n<VM_IP>:8080
+ExtIP --> VMNic : Traffic reaches VM\n(Firewall Allows)
+VMNic --> DockerDaemon : OS routes port 8080 traffic\nto Docker based on mapping
+
+' --- Docker Internal ---
+DockerDaemon -> TheContainer : Maps Host Port 8080\nto Container Port 8080
+TheContainer -- ContainerNic : Attached to Docker Network
+ContainerNic -- DockerNet : Logical Network
+
+AppProc -> ContainerNic : Binds to 0.0.0.0:8080\n(Receives mapped traffic)
+AppProc -> DBProc : Connects via loopback\n(localhost / 127.0.0.1:5432)
+
+DBProc ..> DockerVol : Mounts & R/W Data\n(/var/lib/postgresql/data)
+
+
+@enduml

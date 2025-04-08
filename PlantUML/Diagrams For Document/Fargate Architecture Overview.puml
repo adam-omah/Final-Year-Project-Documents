@@ -1,0 +1,55 @@
+@startuml Layered Fargate Deployment (Rust DB Example - Basic PlantUML)
+
+title AWS Fargate Deployment Layers (Rust DB - Basic)
+
+skinparam packageStyle rectangle
+
+actor "User / Client" as User
+
+package "AWS Cloud Environment" {
+
+  package "Networking (VPC)" {
+    node "VPC" {
+      node "Public Subnets (Multi-AZ)" as Subnets
+      node "Internet Gateway" as IGW
+      node "Security Group" as SG
+    }
+  }
+
+  package "ECS (Container Orchestration)" {
+      node "ECS Cluster" as Cluster {
+          node "ECS Service" as Service {
+             node "ECS Task Definition" as TaskDef <<Blueprint>>
+          }
+      }
+  }
+
+  package "Compute (Fargate)" {
+    node "Fargate Task Instance" as FargateTask {
+      interface "Public IP : Port 8080" as TaskIP
+      component "Rust DB Container" as Container
+    }
+  }
+
+  package "Storage (Optional Persistence)" {
+      database "EFS Volume" as EFS
+  }
+
+}
+
+' --- Relationships ---
+User --> TaskIP : Request (Port 8080)
+TaskIP -- Container : Forwards Traffic
+
+Container ..> EFS : Mounts & R/W Data (If Configured)
+
+FargateTask -- Subnets : Runs In
+FargateTask ..> SG : Associated With
+
+Subnets -- IGW : Route to Internet
+
+Service --> FargateTask : Runs & Manages
+TaskDef .up.> Service : Defines Task
+
+
+@enduml
