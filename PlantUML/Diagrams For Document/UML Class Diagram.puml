@@ -1,0 +1,164 @@
+@startuml
+
+class AppState {
+    schema
+    config
+    change_logger
+    passive_replication_queue
+    user_cache
+}
+
+class Schema {
+    tables
+}
+
+class Table {
+    name
+    columns
+}
+
+class Column {
+    name
+    data_type
+    rules
+}
+
+enum DataType {
+    Int
+    String
+    UUID
+    DateTime
+}
+
+class Rule {
+    constraint_type
+    action
+}
+
+enum ConstraintType {
+    Unique
+    NotNull
+}
+
+enum RuleAction {
+    SetNull
+    SetDefault
+    Reject
+}
+
+
+class DatabaseConfig {
+    db_dir
+    schema_file
+    table_dir
+    database_name
+    replication
+    node_url
+    node_port
+}
+
+class ReplicationConfig {
+    max_offline_duration
+    max_replication_attempts
+    retry_interval
+    sync_interval
+}
+
+class User {
+    uuid
+    username
+}
+
+enum ChangeType {
+    Create
+    Insert
+    Update
+    Delete
+    Drop
+}
+
+class ChangeLogEntry {
+    change_id
+    change_type
+    table_name
+    data
+    user
+}
+
+class ChangeLogger {
+    log_directory
+    log_file
+}
+
+enum ReplicationMode {
+    All
+    Specific
+}
+
+class ReplicationNode {
+    name
+    node_url
+    replication_mode
+    shared_secret
+}
+
+class NodesConfig {
+    nodes
+}
+
+class ReplicationRequest {
+    schema
+    entries
+    target_node
+}
+
+class ReplicationResponse {
+    status
+    message
+}
+
+class QueuedReplicationRequest {
+    request
+    attempts
+    last_attempt
+}
+
+class PassiveReplicationQueue {
+    queue
+}
+
+class StaleReplicationQueue {
+    queue
+}
+
+enum ReplicationError {
+    ConfigLoadError
+    NetworkError
+}
+
+
+AppState -- Schema
+AppState -- DatabaseConfig
+AppState -- ChangeLogger
+AppState -- PassiveReplicationQueue
+AppState -- User
+Schema -- Table
+Table -- Column
+Column -- Rule
+Column -- DataType
+Rule -- ConstraintType
+Rule -- RuleAction
+ReplicationNode -- NodesConfig
+DatabaseConfig -- ReplicationConfig
+ReplicationRequest -- Schema
+ReplicationRequest -- ChangeLogEntry
+ReplicationRequest -- ReplicationNode
+QueuedReplicationRequest -- ReplicationRequest
+PassiveReplicationQueue -- QueuedReplicationRequest
+StaleReplicationQueue -- QueuedReplicationRequest
+ReplicationNode -- ReplicationMode
+ChangeLogEntry -- ChangeType
+
+class TableData
+
+@enduml
