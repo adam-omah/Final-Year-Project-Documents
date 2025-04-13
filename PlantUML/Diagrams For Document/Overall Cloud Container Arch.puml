@@ -1,0 +1,86 @@
+
+**Changes Compared to GCE Diagram:**
+
+*   Replaced "Google Cloud Platform" with "AWS Cloud".
+*   Replaced "GCE VM Instance" with "EC2 Instance".
+*   Replaced "Firewall Rule" with "Security Group" (AWS term for instance firewall).
+*   Replaced "External IP Address" with "Public IP Address / DNS".
+*   Added "Internet Gateway" as it's an explicit VPC component in AWS for internet connectivity.
+*   Renamed the Docker Volume to `pg_ec2_data` for clarity.
+*   Updated notes slightly to reflect AWS terminology (like EBS volume for persistence).
+*   The core structure (OS -> Docker -> Container -> Processes -> Volume/Network) remains the same.
+
+---
+
+**Diagram 2: Abstracted High-Level Cloud Container Architecture Overview**
+
+This diagram generalizes the two main patterns you used (Serverless Container Platform like Cloud Run/App Runner and Managed VM like GCE/EC2) for the combined container approach.
+
+```plantuml
+@startuml Abstract Cloud Container Deployment (Combined Container)
+
+title Abstracted Cloud Container Deployment Patterns (Combined App)
+
+skinparam packageStyle rectangle
+skinparam node {
+    borderColor Black
+    borderThickness 1
+}
+skinparam component {
+    borderColor Black
+    borderThickness 1
+}
+skinparam rectangle {
+    borderColor Black
+    borderThickness 1
+}
+
+actor "User / Client" as User
+
+package "Cloud Provider (AWS / GCP)" {
+
+    rectangle "Pattern 1: Serverless Container Platform\n(e.g., Cloud Run, App Runner)" as ServerlessPattern {
+        node "Managed Service Instance" as ServerlessInstance {
+           interface "Public HTTPS URL" as ServerlessURL
+           node "Container Instance (Ephemeral)" as ServerlessContainer {
+               component "App Process\n(Listens 8080)" as ServerlessApp
+               component "DB Process\n(Listens 5432)" as ServerlessDB
+           }
+        }
+        ServerlessApp -> ServerlessDB : localhost:5432
+    }
+
+    rectangle "Pattern 2: Managed VM + Docker\n(e.g., EC2, Compute Engine)" as VMPattern {
+       node "VM Instance" as VM {
+          interface "External IP Address:8080" as VMIP
+           node "OS + Docker Engine" as VMDocker {
+                node "Docker Volume\n(Persistent)" as VMVol
+                node "Running Container" as VMContainer {
+                    component "App Process\n(Listens 8080)" as VMApp
+                    component "DB Process\n(Listens 5432)" as VMDB
+                }
+           }
+       }
+       VMApp -> VMDB : localhost:5432
+       VMDB ..> VMVol : R/W Data
+    }
+
+    package "Cloud Networking & Security (Conceptual)" {
+        node "Firewall / Security Group" as Firewall
+        node "VPC / Network" as VPC
+        node "Load Balancer / Gateway (Implied)" as LB
+    }
+
+}
+
+' --- Simplified Flows ---
+User --> ServerlessURL : Request (HTTPS)
+User --> VMIP : Request (HTTP:8080)
+
+ServerlessURL --> ServerlessInstance : Managed Routing
+VMIP --> VM : Network Routing (via Firewall)
+VM --> VMDocker : OS/Docker Port Mapping
+VMDocker --> VMContainer : Delivers Request
+
+
+@enduml
