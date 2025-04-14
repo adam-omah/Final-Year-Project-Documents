@@ -149,11 +149,6 @@ HTTP - Select All Subsribers,1000,23,10,59,6.1,0.00%,166.41704,15429,40.47,94938
 HTTP - Select Subsribers by Like Comparison,1000,1131,871,1582,124.14,0.00%,4.39325,407.31,1.19,94938,10k,local,Rust
 HTTP - Update Rows,1000,93,46,196,18.35,0.00%,44.51963,5.83,15.39,134,10k,local,Rust
 HTTP - Delete Rows,1000,30,20,65,6.77,0.30%,96.11688,13.32,26.95,141.9,10k,local,Rust
-HTTP - Insert Subscriber,10000,53,1,334,44.39,0.00%,123.33498,21.68,36.11,180,10k,local_Rust_No,Limit
-HTTP - Select All Subsribers,1000,78,29,925,47.3,0.00%,58.1463,54963.07,13.51,967941,10k,local_Rust_No,Limit
-HTTP - Select Subsribers by Like Comparison,1000,1191,926,1932,148.24,0.00%,4.15034,3923.13,1.08,967941,10k,local_Rust_No,Limit
-HTTP - Update Rows,1000,93,41,206,21.98,0.00%,44.36557,5.81,15.34,134,10k,local_Rust_No,Limit
-HTTP - Delete Rows,1000,32,19,80,7.61,0.20%,94.17969,12.87,26.44,139.9,10k,local_Rust_No,Limit
 HTTP - Insert Subscriber,1000,170,106,642,51.28,0.00%,44.77879,9.78,13.98,223.7,1k,AWS_EC2,H2
 HTTP - Select All Subsribers,100,307,114,1198,187.04,0.00%,13.34757,1852.2,2.83,142097,1k,AWS_EC2,H2
 HTTP - Select Subsribers by Like Comparison,100,328,123,1556,238.32,0.00%,9.75419,1353.56,2.34,142097,1k,AWS_EC2,H2
